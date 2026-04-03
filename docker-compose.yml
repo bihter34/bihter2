@@ -1,0 +1,21 @@
+# version: '3.8'
+
+services:
+  # Production servisi
+  bihter-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bihter-app
+    ports:
+      - "3010:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3010/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
